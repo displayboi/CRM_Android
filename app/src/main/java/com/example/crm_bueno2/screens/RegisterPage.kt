@@ -43,7 +43,11 @@ fun RegisterPage(navController: NavController) {
                     }
                 }
         }) {
-            Text("Register")
+            Text("Registrarse")
+        }
+        Spacer(modifier = Modifier.height(8.dp))
+        Button(onClick = { navController.navigate("login") }) {
+            Text("Volver a login")
         }
         errorMessage?.let { Text(it, color = MaterialTheme.colorScheme.error) }
     }

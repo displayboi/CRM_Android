@@ -37,13 +37,17 @@ fun LoginPage(navController: NavController) {
             auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        navController.navigate("agenda")
+                        navController.navigate("home")
                     } else {
                         errorMessage = task.exception?.message
                     }
                 }
         }) {
-            Text("Login")
+            Text("Iniciar sesion")
+        }
+        Spacer(modifier = Modifier.height(8.dp))
+        Button(onClick = { navController.navigate("register") }) {
+            Text("Ir a registro")
         }
         errorMessage?.let { Text(it, color = MaterialTheme.colorScheme.error) }
     }

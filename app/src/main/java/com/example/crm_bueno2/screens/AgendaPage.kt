@@ -20,21 +20,29 @@ import com.google.firebase.firestore.FirebaseFirestore
 fun AgendaPage(navController: NavController) {
     val db = FirebaseFirestore.getInstance()
     var task by remember { mutableStateOf("") }
-    var tasks by remember { mutableStateOf(listOf<String>()) }
-    
-    Column( modifier = Modifier
-        .fillMaxSize()
-        .background(MaterialTheme.colorScheme.background)) {
+    var tasks by remember { mutableStateOf(listOf<Pair<String, String>>()) }
+
+    LaunchedEffect(Unit) {
+        loadTasks(db) { tasks = it }
+    }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
+    ) {
         Header("Agenda")
 
         Column(
-            modifier = Modifier.fillMaxSize().padding(16.dp),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
             verticalArrangement = Arrangement.Top
         ) {
             TextField(
                 value = task,
                 onValueChange = { task = it },
-                label = { Text("New Task") },
+                label = { Text("Nueva tarea") },
                 modifier = Modifier.fillMaxWidth()
             )
             Spacer(modifier = Modifier.height(8.dp))
@@ -45,11 +53,20 @@ fun AgendaPage(navController: NavController) {
                     loadTasks(db) { tasks = it }
                 }
             }) {
-                Text("Add Task")
+                Text("Añadir tarea")
             }
             Spacer(modifier = Modifier.height(16.dp))
-            tasks.forEach {
-                Text(it, modifier = Modifier.padding(8.dp))
+            tasks.forEach { (id, taskText) ->
+                Row(modifier = Modifier.fillMaxWidth().padding(8.dp)) {
+                    Text(taskText, modifier = Modifier.weight(1f))
+                    Button(onClick = {
+                        db.collection("agenda").document(id).delete().addOnSuccessListener {
+                            loadTasks(db) { tasks = it }
+                        }
+                    }) {
+                        Text("✔\uFE0E")
+                    }
+                }
             }
         }
 
@@ -57,9 +74,9 @@ fun AgendaPage(navController: NavController) {
     }
 }
 
-fun loadTasks(db: FirebaseFirestore, callback: (List<String>) -> Unit) {
+fun loadTasks(db: FirebaseFirestore, callback: (List<Pair<String, String>>) -> Unit) {
     db.collection("agenda").get().addOnSuccessListener { result ->
-        val taskList = result.map { it.getString("task") ?: "" }
+        val taskList = result.map { it.id to (it.getString("task") ?: "") }
         callback(taskList)
     }
 }
