@@ -8,7 +8,9 @@ import androidx.navigation.compose.rememberNavController
 import com.example.crm_bueno2.screens.AgendaPage
 import com.example.crm_bueno2.screens.CalendarPage
 import com.example.crm_bueno2.screens.HomePage
+import com.example.crm_bueno2.screens.LoginPage
 import com.example.crm_bueno2.screens.MessagesPage
+import com.example.crm_bueno2.screens.RegisterPage
 import com.example.crm_bueno2.screens.SettingsPage
 
 @Composable
@@ -21,6 +23,8 @@ fun NavGraph(onThemeChange: () -> Unit) {
         composable("calendar") { CalendarPage(navController) }
         composable("messages") { MessagesPage(navController) }
         composable("settings") { SettingsPage(onThemeChange) }
+        composable("login") { LoginPage(navController) }
+        composable("register") { RegisterPage(navController) }
 
     }
 }
