@@ -42,8 +42,9 @@ fun AgendaPage(navController: NavController) {
             TextField(
                 value = task,
                 onValueChange = { task = it },
-                label = { Text("Nueva tarea") },
-                modifier = Modifier.fillMaxWidth()
+                label = { Text("Nueva tarea", color = MaterialTheme.colorScheme.onBackground) },
+                modifier = Modifier.fillMaxWidth(),
+                textStyle = MaterialTheme.typography.bodyLarge.copy(color = MaterialTheme.colorScheme.onBackground)
             )
             Spacer(modifier = Modifier.height(8.dp))
             Button(onClick = {
@@ -58,7 +59,11 @@ fun AgendaPage(navController: NavController) {
             Spacer(modifier = Modifier.height(16.dp))
             tasks.forEach { (id, taskText) ->
                 Row(modifier = Modifier.fillMaxWidth().padding(8.dp)) {
-                    Text(taskText, modifier = Modifier.weight(1f))
+                    Text(
+                        text = taskText,
+                        modifier = Modifier.weight(1f),
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
                     Button(onClick = {
                         db.collection("agenda").document(id).delete().addOnSuccessListener {
                             loadTasks(db) { tasks = it }
@@ -73,6 +78,7 @@ fun AgendaPage(navController: NavController) {
         Footer(navController)
     }
 }
+
 
 fun loadTasks(db: FirebaseFirestore, callback: (List<Pair<String, String>>) -> Unit) {
     db.collection("agenda").get().addOnSuccessListener { result ->

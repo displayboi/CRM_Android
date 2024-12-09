@@ -1,11 +1,14 @@
 package com.example.crm_bueno2.screens
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.crm_bueno2.components.Header
 import com.google.firebase.auth.FirebaseAuth
 
 @Composable
@@ -16,9 +19,15 @@ fun RegisterPage(navController: NavController) {
     var errorMessage by remember { mutableStateOf<String?>(null) }
 
     Column(
-        modifier = Modifier.fillMaxSize().padding(16.dp),
+        modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background),
         verticalArrangement = Arrangement.Center
     ) {
+        Column(
+            modifier = Modifier.fillMaxSize().padding(16.dp),
+            verticalArrangement = Arrangement.Center
+        ) {
+        Header("Registrate")
+        Spacer(modifier = Modifier.height(20.dp))
         TextField(
             value = email,
             onValueChange = { email = it },
@@ -30,10 +39,23 @@ fun RegisterPage(navController: NavController) {
             value = password,
             onValueChange = { password = it },
             label = { Text("Password") },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+                    visualTransformation = PasswordVisualTransformation()
         )
         Spacer(modifier = Modifier.height(16.dp))
         Button(onClick = {
+
+            if (email.isBlank()) {
+
+                    errorMessage = "El correo no puede estar vacío"
+
+
+            } else if (password.isBlank()) {
+
+                errorMessage =  "La contraseña no puede estar vacía"
+
+
+            } else {
             auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
@@ -41,7 +63,7 @@ fun RegisterPage(navController: NavController) {
                     } else {
                         errorMessage = task.exception?.message
                     }
-                }
+                }}
         }) {
             Text("Registrarse")
         }
@@ -51,4 +73,4 @@ fun RegisterPage(navController: NavController) {
         }
         errorMessage?.let { Text(it, color = MaterialTheme.colorScheme.error) }
     }
-}
+}}

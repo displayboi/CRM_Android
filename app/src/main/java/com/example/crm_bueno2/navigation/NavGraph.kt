@@ -16,7 +16,7 @@ import com.example.crm_bueno2.screens.SettingsPage
 fun NavGraph(onThemeChange: () -> Unit) {
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = "home") {
+    NavHost(navController = navController, startDestination = "login") {
         composable("home") { HomePage(navController) }
         composable("agenda") { AgendaPage(navController) }
         composable("calendar") { CalendarPage(navController) }
