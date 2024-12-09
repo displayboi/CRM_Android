@@ -18,9 +18,7 @@ fun Footer(navController: NavController) {
             .padding(8.dp),
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
-        Button(onClick = { navController.navigate("messages") }) {
-            Text("✉")
-        }
+
         Button(onClick = { navController.navigate("home") }) {
             Text("\uD83C\uDFE0")
         }
